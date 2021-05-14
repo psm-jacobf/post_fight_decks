@@ -18,10 +18,10 @@ function onOpen() {
 
 function createNewGoogleSlides() {
   // Identify the template slide via its file ID. This is found in the slide URL
-  const googleSlideTemplate = DriveApp.getFileById('Template ID Goes Here as String');
+  const googleSlideTemplate = DriveApp.getFileById('1FepW7lDnWqFRit7iELb-i8pnTYFKfknTpViE0pLSLhs');
 
   // Identify destination folder for the newly generated deck. Again, can be found in the folder URL
-  const destinationFolder = DriveApp.getFolderById('Destination Folder ID Goes Here as String')
+  const destinationFolder = DriveApp.getFolderById('1uc09uKRJoL6P4hgwwm7BTNxP2tiHxU-E')
 
   // Identify individual sheet to pull data from
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('FormResponses');
@@ -53,6 +53,16 @@ function createNewGoogleSlides() {
     //This line just refromats that into MM/DD/YYYY
     const betterDate = new Date(row[6]).toLocaleDateString();
 
+    //currency formatter
+    var cur_formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+      maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+    });
+
+
+
     //This is where 'smart fields' come in. The program just executes a find and replace function.
     //Defined tags will be replaced with data from the spreadsheet row. Formatting is retained from deck template
     //When Applying this script to new files/templates, this is where the bulk of the editing is.  
@@ -62,9 +72,9 @@ function createNewGoogleSlides() {
     deck.replaceAllText('{{Last Name}}', row[4]);
     deck.replaceAllText('{{Event}}', row[5]);
     deck.replaceAllText('{{Event Date}}', betterDate);
-    deck.replaceAllText('{{FightNightPurse}}', row[8]);
+    deck.replaceAllText('{{FightNightPurse}}', cur_formatter.format(row[8]));
     deck.replaceAllText('{{comP}}', row[9]);
-    deck.replaceAllText('{{PSMCom}}', row[10]);
+    deck.replaceAllText('{{PSMCom}}', cur_formatter.format((parseInt(row[10])*.1)));
     deck.replaceAllText('{{ClientResults}}', row[11])
     deck.replaceAllText('{{fNum1}}', row[12]);
     deck.replaceAllText('{{fNum2}}', row[13]);
@@ -73,24 +83,25 @@ function createNewGoogleSlides() {
     deck.replaceAllText('{{GrowthDuring}}', row[16]);
     deck.replaceAllText('{{AccountsReached}}', row[17]);
     deck.replaceAllText('{{WeeklyImpressions}}', row[18]);
-    deck.replaceAllText('{{CashTotal}}',row[19]);
-    deck.replaceAllText('{{Sponsor1}}', row[20]);
-    deck.replaceAllText('{{Fee1}}', row[22]);
-    deck.replaceAllText('{{PSMcom1}}', row[23]);
-    deck.replaceAllText('{{Term1}}', row[24]);
-    deck.replaceAllText('{{Deliverables1}}', row[25]);
-    deck.replaceAllText('{{Sponsor2}}', row[26]);
-    deck.replaceAllText('{{Fee2}}', row[28]);
-    deck.replaceAllText('{{PSMcom2}}', row[29]);
-    deck.replaceAllText('{{Term2}}', row[30]);
-    deck.replaceAllText('{{Deliverables2}}', row[31]);
-    deck.replaceAllText('{{Sponsor3}}', row[32]);
-    deck.replaceAllText('{{Fee3}}', row[34]);
-    deck.replaceAllText('{{PSMcom3}}', row[35]);
-    deck.replaceAllText('{{Term3}}', row[36]);
-    deck.replaceAllText('{{Deliverables3}}', row[37]);
-    deck.replaceAllText('{{cmLink}}', row[38]);
-    deck.replaceAllText('{{oLink}}', row[39]);
+    deck.replaceAllText('{{CashTotal}}',cur_formatter.format(row[20]));
+    deck.replaceAllText('{{CommTotal}}', cur_formatter.format((row[20]*.2))) //make sure this works
+    deck.replaceAllText('{{Sponsor1}}', row[21]);
+    deck.replaceAllText('{{Fee1}}', row[23]);
+    deck.replaceAllText('{{PSMcom1}}', row[24]);
+    deck.replaceAllText('{{Term1}}', row[25]);
+    deck.replaceAllText('{{Deliverables1}}', row[26]);
+    deck.replaceAllText('{{Sponsor2}}', row[27]);
+    deck.replaceAllText('{{Fee2}}', row[29]);
+    deck.replaceAllText('{{PSMcom2}}', row[30]);
+    deck.replaceAllText('{{Term2}}', row[31]);
+    deck.replaceAllText('{{Deliverables2}}', row[32]);
+    deck.replaceAllText('{{Sponsor3}}', row[33]);
+    deck.replaceAllText('{{Fee3}}', row[35]);
+    deck.replaceAllText('{{PSMcom3}}', row[36]);
+    deck.replaceAllText('{{Term3}}', row[37]);
+    deck.replaceAllText('{{Deliverables3}}', row[38]);
+    deck.replaceAllText('{{cmLink}}', row[39]);
+    deck.replaceAllText('{{oLink}}', row[40]);
     //deck.replaceAllText
 
 
@@ -104,8 +115,8 @@ function createNewGoogleSlides() {
 
     //gd872a1c164_0_9
 
-    const image = pageElement.asImage();
-    Logger.log(slide1.getImages());
+    //const image = pageElement.asImage();
+    //Logger.log(slide1.getImages());
 
 
     //replace this w url from row in sheets - change to true for cropping
