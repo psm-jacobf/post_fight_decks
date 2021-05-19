@@ -16,19 +16,22 @@ function onOpen() {
 //File and Folder IDs have been removed for code upload.
 //File and Folder IDs need to be modified to apply to different sheets/slides/docs
 
+function getIdFromUrl(url) { return url.match(/[-\w]{25,}/); }
+
+
 function createNewGoogleSlides() {
   // Identify the template slide via its file ID. This is found in the slide URL
-  const googleSlideTemplate = DriveApp.getFileById('1FepW7lDnWqFRit7iELb-i8pnTYFKfknTpViE0pLSLhs');
+  const googleSlideTemplate = DriveApp.getFileById('file id goes here');
 
   // Identify destination folder for the newly generated deck. Again, can be found in the folder URL
-  const destinationFolder = DriveApp.getFolderById('1uc09uKRJoL6P4hgwwm7BTNxP2tiHxU-E')
+  const destinationFolder = DriveApp.getFolderById('folder id goes here')
 
   // Identify individual sheet to pull data from
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('FormResponses');
 
   // Split sheet data into rows
   const rows = sheet.getDataRange().getValues();
-  Logger.log(rows)
+  //Logger.log(rows)
 
   // Iterate through each row in the spreadsheet and check to see if a deck already exists.
   // If there is no link to the deck in the first cell of a row, a new one is generated.
@@ -104,23 +107,30 @@ function createNewGoogleSlides() {
     deck.replaceAllText('{{oLink}}', row[40]);
     //deck.replaceAllText
 
-
-    // I'm still having an issue with automatic image uploads - need to replace drive image uploads with 
-    //hosted images - for instance, it works with stock images. Current workflow collects images, but requires drag and drop.
-
-    //deck.replace('{{img}}',)
-    //todo - figure out image permissions
-    const slide1 = deck.getSlideById('p');
-    const pageElement = slide1.getPageElementById('gd872a1c164_0_9');
-
-    //gd872a1c164_0_9
-
-    //const image = pageElement.asImage();
     //Logger.log(slide1.getImages());
 
 
     //replace this w url from row in sheets - change to true for cropping
     //image.replace(row[7], false);
+
+    var cell7 = row[7]
+    //(row[7] != null())
+
+    if(row[7].length < 1){
+      //pass
+    } else {
+      const slide1 = deck.getSlideById('p');
+      const pageElement = slide1.getPageElementById('gdb3f89f5fe_0_0');
+
+      //gd872a1c164_0_9
+
+      const image1 = pageElement.asImage();
+      img_id1 = getIdFromUrl(row[7]);
+      var img1 = DriveApp.getFileById(img_id1).getBlob();
+      image1.replace(img1, true); //boolean dictates whether or not to crop 
+      //deck.replaceAllText('{{Client}}', img1)  
+    } 
+    
 
     // Save changes to the deck and fetch it's URL
     deck.saveAndClose();
