@@ -21,10 +21,10 @@ function getIdFromUrl(url) { return url.match(/[-\w]{25,}/); }
 
 function createNewGoogleSlides() {
   // Identify the template slide via its file ID. This is found in the slide URL
-  const googleSlideTemplate = DriveApp.getFileById('file id goes here');
+  const googleSlideTemplate = DriveApp.getFileById('id goes here');
 
   // Identify destination folder for the newly generated deck. Again, can be found in the folder URL
-  const destinationFolder = DriveApp.getFolderById('folder id goes here')
+  const destinationFolder = DriveApp.getFolderById('id goes here')
 
   // Identify individual sheet to pull data from
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('FormResponses');
@@ -77,7 +77,10 @@ function createNewGoogleSlides() {
     deck.replaceAllText('{{Event Date}}', betterDate);
     deck.replaceAllText('{{FightNightPurse}}', cur_formatter.format(row[8]));
     deck.replaceAllText('{{comP}}', row[9]);
-    deck.replaceAllText('{{PSMCom}}', cur_formatter.format((parseInt(row[10])*.1)));
+    var comval = parseInt(row[10].value);
+    //deck.replaceAllText('{{PSMCom}}', comval);
+    //deck.replaceAllText('{{PSMCom}}', row[10])
+    deck.replaceAllText('{{PSMCom}}', cur_formatter.format((parseInt(row[8]))*.1));
     deck.replaceAllText('{{ClientResults}}', row[11])
     deck.replaceAllText('{{fNum1}}', row[12]);
     deck.replaceAllText('{{fNum2}}', row[13]);
@@ -107,15 +110,11 @@ function createNewGoogleSlides() {
     deck.replaceAllText('{{oLink}}', row[40]);
     //deck.replaceAllText
 
-    //Logger.log(slide1.getImages());
+  
 
+    
 
-    //replace this w url from row in sheets - change to true for cropping
-    //image.replace(row[7], false);
-
-    var cell7 = row[7]
-    //(row[7] != null())
-
+    //Cover Slide Image Replacement
     if(row[7].length < 1){
       //pass
     } else {
@@ -128,9 +127,61 @@ function createNewGoogleSlides() {
       img_id1 = getIdFromUrl(row[7]);
       var img1 = DriveApp.getFileById(img_id1).getBlob();
       image1.replace(img1, true); //boolean dictates whether or not to crop 
-      //deck.replaceAllText('{{Client}}', img1)  
+        
     } 
     
+    //Logo 1 image replacement
+
+    if(row[22].length < 1){
+      //pass
+    } else {
+      const slide4 = deck.getSlideById('gd872a1c164_0_41');
+      const pageElement2 = slide4.getPageElementById('gd872a1c164_0_55');
+
+      //gd872a1c164_0_9
+
+      const logo1 = pageElement2.asImage();
+      logo_id1 = getIdFromUrl(row[22]);
+      var lg1 = DriveApp.getFileById(logo_id1).getBlob();
+      logo1.replace(lg1, false); //boolean dictates whether or not to crop 
+        
+    } 
+
+
+    //logo 2 replacement
+    if(row[28].length < 1){
+      //pass
+    } else {
+      const slide4 = deck.getSlideById('gd872a1c164_0_41');
+      const pageElement3 = slide4.getPageElementById('gd872a1c164_0_58');
+
+      //gd872a1c164_0_9
+
+      const logo2 = pageElement3.asImage();
+      logo_id2 = getIdFromUrl(row[28]);
+      var lg2 = DriveApp.getFileById(logo_id2).getBlob();
+      logo2.replace(lg2, false); //boolean dictates whether or not to crop 
+        
+    } 
+
+
+    //logo 3 replacement
+    if(row[34].length < 1){
+      //pass
+    } else {
+      const slide4 = deck.getSlideById('gd872a1c164_0_41');
+      const pageElement4 = slide4.getPageElementById('gd872a1c164_0_60');
+
+      //gd872a1c164_0_9
+
+      const logo3 = pageElement4.asImage();
+      logo_id3 = getIdFromUrl(row[34]);
+      var lg3 = DriveApp.getFileById(logo_id3).getBlob();
+      logo3.replace(lg3, false); //boolean dictates whether or not to crop 
+        
+    } 
+
+
 
     // Save changes to the deck and fetch it's URL
     deck.saveAndClose();
