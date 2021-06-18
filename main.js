@@ -16,15 +16,16 @@ function onOpen() {
 //File and Folder IDs have been removed for code upload.
 //File and Folder IDs need to be modified to apply to different sheets/slides/docs
 
+//function to get id from image url
 function getIdFromUrl(url) { return url.match(/[-\w]{25,}/); }
 
 
 function createNewGoogleSlides() {
   // Identify the template slide via its file ID. This is found in the slide URL
-  const googleSlideTemplate = DriveApp.getFileById('id goes here');
+  const googleSlideTemplate = DriveApp.getFileById('1FepW7lDnWqFRit7iELb-i8pnTYFKfknTpViE0pLSLhs');
 
   // Identify destination folder for the newly generated deck. Again, can be found in the folder URL
-  const destinationFolder = DriveApp.getFolderById('id goes here')
+  const destinationFolder = DriveApp.getFolderById('1uc09uKRJoL6P4hgwwm7BTNxP2tiHxU-E')
 
   // Identify individual sheet to pull data from
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('FormResponses');
@@ -64,8 +65,11 @@ function createNewGoogleSlides() {
       maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
     });
 
-
-
+    if(row[43].length < 1){
+      var bonus_val = 0
+    } else {
+      var bonus_val = parseInt(row[43]);
+    }
     //This is where 'smart fields' come in. The program just executes a find and replace function.
     //Defined tags will be replaced with data from the spreadsheet row. Formatting is retained from deck template
     //When Applying this script to new files/templates, this is where the bulk of the editing is.  
@@ -76,19 +80,25 @@ function createNewGoogleSlides() {
     deck.replaceAllText('{{Event}}', row[5]);
     deck.replaceAllText('{{Event Date}}', betterDate);
     deck.replaceAllText('{{FightNightPurse}}', cur_formatter.format(row[8]));
+    deck.replaceAllText('{{FightNightBonus}}', cur_formatter.format(bonus_val))
+    var fntotal = parseInt(row[8]) + parseInt(bonus_val)
+    
+    deck.replaceAllText('{{FightNightTotal}}', cur_formatter.format(fntotal))
     deck.replaceAllText('{{comP}}', row[9]);
     var comval = parseInt(row[10].value);
     //deck.replaceAllText('{{PSMCom}}', comval);
-    //deck.replaceAllText('{{PSMCom}}', row[10])
-    deck.replaceAllText('{{PSMCom}}', cur_formatter.format((parseInt(row[8]))*.1));
+    deck.replaceAllText('{{PSMCom}}', cur_formatter.format(fntotal * .1))
+    //deck.replaceAllText('{{PSMCom}}', cur_formatter.format((parseInt(row[8]))*.1));
+    
     deck.replaceAllText('{{ClientResults}}', row[11])
     deck.replaceAllText('{{fNum1}}', row[12]);
     deck.replaceAllText('{{fNum2}}', row[13]);
     deck.replaceAllText('{{Promotion}}', row[14]);
     deck.replaceAllText('{{NewFollowers}}', row[15]);
     deck.replaceAllText('{{GrowthDuring}}', row[16]);
-    deck.replaceAllText('{{AccountsReached}}', row[17]);
-    deck.replaceAllText('{{WeeklyImpressions}}', row[18]);
+    deck.replaceAllText('{{ProfileVisits}}', row[17]);
+    deck.replaceAllText('{{AccountsReached}}', row[18]);
+    deck.replaceAllText('{{WeeklyImpressions}}', row[19]);
     deck.replaceAllText('{{CashTotal}}',cur_formatter.format(row[20]));
     deck.replaceAllText('{{CommTotal}}', cur_formatter.format((row[20]*.2))) //make sure this works
     deck.replaceAllText('{{Sponsor1}}', row[21]);
@@ -180,6 +190,9 @@ function createNewGoogleSlides() {
       logo3.replace(lg3, false); //boolean dictates whether or not to crop 
         
     } 
+
+
+
 
 
 
