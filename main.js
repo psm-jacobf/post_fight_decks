@@ -68,8 +68,15 @@ function createNewGoogleSlides() {
     if(row[43].length < 1){
       var bonus_val = 0
     } else {
-      var bonus_val = parseInt(row[43]);
+      var bonus_val = parseInt(row[9]);
     }
+
+    if(row[43].length < 1){
+      var winbonus_val = 0
+    } else {
+      var winbonus_val = parseInt(row[45]);
+    }
+
     //This is where 'smart fields' come in. The program just executes a find and replace function.
     //Defined tags will be replaced with data from the spreadsheet row. Formatting is retained from deck template
     //When Applying this script to new files/templates, this is where the bulk of the editing is.  
@@ -80,8 +87,9 @@ function createNewGoogleSlides() {
     deck.replaceAllText('{{Event}}', row[5]);
     deck.replaceAllText('{{Event Date}}', betterDate);
     deck.replaceAllText('{{FightNightPurse}}', cur_formatter.format(row[8]));
-    deck.replaceAllText('{{FightNightBonus}}', cur_formatter.format(bonus_val))
-    var fntotal = parseInt(row[8]) + parseInt(bonus_val)
+    deck.replaceAllText('{{WinBonus}}', cur_formatter.format(winbonus_val));
+    deck.replaceAllText('{{FightNightBonus}}', cur_formatter.format(bonus_val));
+    var fntotal = parseInt(row[8]) + parseInt(bonus_val) + parseInt(winbonus_val)
     
     deck.replaceAllText('{{FightNightTotal}}', cur_formatter.format(fntotal))
     deck.replaceAllText('{{comP}}', row[9]);
@@ -90,34 +98,34 @@ function createNewGoogleSlides() {
     deck.replaceAllText('{{PSMCom}}', cur_formatter.format(fntotal * .1))
     //deck.replaceAllText('{{PSMCom}}', cur_formatter.format((parseInt(row[8]))*.1));
     
-    deck.replaceAllText('{{ClientResults}}', row[11])
-    deck.replaceAllText('{{fNum1}}', row[12]);
-    deck.replaceAllText('{{fNum2}}', row[13]);
-    deck.replaceAllText('{{Promotion}}', row[14]);
-    deck.replaceAllText('{{NewFollowers}}', row[15]);
-    deck.replaceAllText('{{GrowthDuring}}', row[16]);
-    deck.replaceAllText('{{ProfileVisits}}', row[17]);
-    deck.replaceAllText('{{AccountsReached}}', row[18]);
-    deck.replaceAllText('{{WeeklyImpressions}}', row[19]);
-    deck.replaceAllText('{{CashTotal}}',cur_formatter.format(row[20]));
-    deck.replaceAllText('{{CommTotal}}', cur_formatter.format((row[20]*.2))) //make sure this works
-    deck.replaceAllText('{{Sponsor1}}', row[21]);
-    deck.replaceAllText('{{Fee1}}', row[23]);
-    deck.replaceAllText('{{PSMcom1}}', row[24]);
-    deck.replaceAllText('{{Term1}}', row[25]);
-    deck.replaceAllText('{{Deliverables1}}', row[26]);
-    deck.replaceAllText('{{Sponsor2}}', row[27]);
-    deck.replaceAllText('{{Fee2}}', row[29]);
-    deck.replaceAllText('{{PSMcom2}}', row[30]);
-    deck.replaceAllText('{{Term2}}', row[31]);
-    deck.replaceAllText('{{Deliverables2}}', row[32]);
-    deck.replaceAllText('{{Sponsor3}}', row[33]);
-    deck.replaceAllText('{{Fee3}}', row[35]);
-    deck.replaceAllText('{{PSMcom3}}', row[36]);
-    deck.replaceAllText('{{Term3}}', row[37]);
-    deck.replaceAllText('{{Deliverables3}}', row[38]);
-    deck.replaceAllText('{{cmLink}}', row[39]);
-    deck.replaceAllText('{{oLink}}', row[40]);
+    deck.replaceAllText('{{ClientResults}}', row[12])
+    deck.replaceAllText('{{fNum1}}', row[13]);
+    deck.replaceAllText('{{fNum2}}', row[14]);
+    deck.replaceAllText('{{Promotion}}', row[15]);
+    deck.replaceAllText('{{NewFollowers}}', row[16]);
+    deck.replaceAllText('{{GrowthDuring}}', row[17]);
+    deck.replaceAllText('{{TotalInteractions}}', row[18]);
+    deck.replaceAllText('{{AvgWeeklyInteractions}}', row[19]);
+    deck.replaceAllText('{{WeeklyInteractionRate}}', row[20]);
+    deck.replaceAllText('{{CashTotal}}',cur_formatter.format(row[21]));
+    deck.replaceAllText('{{CommTotal}}', cur_formatter.format((row[21]*.2))) //make sure this works
+    deck.replaceAllText('{{Sponsor1}}', row[22]);
+    deck.replaceAllText('{{Fee1}}', row[24]);
+    deck.replaceAllText('{{PSMcom1}}', row[25]);
+    deck.replaceAllText('{{Term1}}', row[26]);
+    deck.replaceAllText('{{Deliverables1}}', row[27]);
+    deck.replaceAllText('{{Sponsor2}}', row[28]);
+    deck.replaceAllText('{{Fee2}}', row[30]);
+    deck.replaceAllText('{{PSMcom2}}', row[31]);
+    deck.replaceAllText('{{Term2}}', row[32]);
+    deck.replaceAllText('{{Deliverables2}}', row[33]);
+    deck.replaceAllText('{{Sponsor3}}', row[34]);
+    deck.replaceAllText('{{Fee3}}', row[36]);
+    deck.replaceAllText('{{PSMcom3}}', row[37]);
+    deck.replaceAllText('{{Term3}}', row[38]);
+    deck.replaceAllText('{{Deliverables3}}', row[39]);
+    deck.replaceAllText('{{cmLink}}', row[40]);
+    deck.replaceAllText('{{oLink}}', row[41]);
     //deck.replaceAllText
 
   
@@ -142,7 +150,7 @@ function createNewGoogleSlides() {
     
     //Logo 1 image replacement
 
-    if(row[22].length < 1){
+    if(row[23].length < 1){
       //pass
     } else {
       const slide4 = deck.getSlideById('gd872a1c164_0_41');
@@ -151,7 +159,7 @@ function createNewGoogleSlides() {
       //gd872a1c164_0_9
 
       const logo1 = pageElement2.asImage();
-      logo_id1 = getIdFromUrl(row[22]);
+      logo_id1 = getIdFromUrl(row[23]);
       var lg1 = DriveApp.getFileById(logo_id1).getBlob();
       logo1.replace(lg1, false); //boolean dictates whether or not to crop 
         
@@ -159,7 +167,7 @@ function createNewGoogleSlides() {
 
 
     //logo 2 replacement
-    if(row[28].length < 1){
+    if(row[29].length < 1){
       //pass
     } else {
       const slide4 = deck.getSlideById('gd872a1c164_0_41');
@@ -168,7 +176,7 @@ function createNewGoogleSlides() {
       //gd872a1c164_0_9
 
       const logo2 = pageElement3.asImage();
-      logo_id2 = getIdFromUrl(row[28]);
+      logo_id2 = getIdFromUrl(row[29]);
       var lg2 = DriveApp.getFileById(logo_id2).getBlob();
       logo2.replace(lg2, false); //boolean dictates whether or not to crop 
         
@@ -176,7 +184,7 @@ function createNewGoogleSlides() {
 
 
     //logo 3 replacement
-    if(row[34].length < 1){
+    if(row[35].length < 1){
       //pass
     } else {
       const slide4 = deck.getSlideById('gd872a1c164_0_41');
@@ -185,7 +193,7 @@ function createNewGoogleSlides() {
       //gd872a1c164_0_9
 
       const logo3 = pageElement4.asImage();
-      logo_id3 = getIdFromUrl(row[34]);
+      logo_id3 = getIdFromUrl(row[35]);
       var lg3 = DriveApp.getFileById(logo_id3).getBlob();
       logo3.replace(lg3, false); //boolean dictates whether or not to crop 
         
@@ -205,7 +213,8 @@ function createNewGoogleSlides() {
     //todo - add other emails and reformat
     
     MailApp.sendEmail({
-      to: row[42],
+      to: row[43]+ "," + "griffina@paradigmsports.com" + "," + "jacobf@paradigmsports.com",
+      //to: 'tims@paradigmsports.com',
       subject: (row[2] + " Post Fight Summary"),
       htmlBody: "Hello, <br> <br> Here is the post-fight deck you requested for " + row[2] 
       +": <br> <br>" + url + "<br> <br> Please review to ensure accuracy and remove unused sections. <br> <br> An Asana task will be generated in the next few minutes. Once the Asana task is marked as complete by yourself or Griffin, a record describing this deck will be uploaded to Insightly. <br> <br> Thanks, <br> Jacob"
